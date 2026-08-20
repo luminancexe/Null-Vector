@@ -90,7 +90,7 @@ html, body {
   width: 48px;
   height: 48px;
   pointer-events: none;
-  display: flex;
+  display: none; /* Hidden by default until mission starts */
   align-items: center;
   justify-content: center;
   z-index: 25;

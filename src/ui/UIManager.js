@@ -52,6 +52,10 @@ export class UIManager {
     this.damageTimer = null;
     this.recoilBloom = 0;
 
+    // Ensure HUD and crosshair start hidden until PLAYING state
+    if (this.crosshair) this.crosshair.style.display = 'none';
+    if (this.hud) this.hud.style.display = 'none';
+
     this.updateHUD();
   }
 
@@ -264,6 +268,8 @@ export class UIManager {
         const totalSpread = Math.max(1, Math.round(baseSpread + moveBloom + this.recoilBloom));
         this.crosshair.style.setProperty('--spread', `${totalSpread}px`);
       }
+    } else if (this.crosshair) {
+      this.crosshair.style.display = 'none';
     }
   }
 }
