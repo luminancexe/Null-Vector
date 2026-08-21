@@ -1,17 +1,42 @@
 # NULL VECTOR — Browser-Based Sci-Fi First-Person Shooter
 
-**Null Vector** is a complete, polished, browser-based first-person shooter (FPS) developed using HTML5, CSS3, JavaScript (ES6 modules), Three.js (WebGL), Pointer Lock API, and procedural Web Audio API.
+**Null Vector** is a complete, production-ready, browser-based sci-fi first-person shooter (FPS) developed using HTML5, CSS3, JavaScript (ES6 modules), Three.js (WebGL), Pointer Lock API, and procedural Web Audio API.
 
-**Current Mission: Operation: Blacksite**
+The game is 100% self-contained with no external server or backend dependencies, using procedurally synthesized audio, dynamic lighting, custom viewmodels with cybernetic tactical arms, and high-definition procedural textures.
 
-The game is 100% self-contained with no external server or backend dependencies, using procedurally synthesized audio and procedural high-definition textures.
+---
+
+## 🚀 Campaign Missions
+
+### 1. Mission 01 — Operation: Blacksite
+- **Location**: Subterranean Research Complex Theta-9
+- **Status**: Secure Data Retrieval
+- **Objectives**:
+  1. Breach facility airlock checkpoint.
+  2. Clear cargo bay hostiles.
+  3. Locate and hack the security core terminal.
+  4. Survive a 30-second security lockdown reinforcement wave.
+  5. Reach the extraction landing zone and secure the data.
+
+### 2. Mission 02 — Blackout
+- **Location**: Research Facility 07
+- **Status**: Facility Offline // Power Grid Disabled
+- **Objectives**:
+  1. Infiltrate facility entrance through the exterior rain landing zone.
+  2. Restore auxiliary power in the maintenance tunnels (Relay A).
+  3. Activate secondary and tertiary power relays in research and server wings (Relays B & C).
+  4. Override security lockdown in the master control room.
+  5. Recover classified incident logs (*Project Singularity*) from the server archive.
+  6. Survive a 45-second high-threat lockdown arena wave against drones, phantoms, and enforcers.
+  7. Investigate the pulsing anomaly in the Central Systems Chamber.
+  8. Evacuate to the exterior landing pad under a strict 03:00 critical countdown timer.
 
 ---
 
 ## 🎮 How to Play
 
 ### Running Locally
-You can run the game with any local static server:
+You can launch the game using any local static server:
 
 #### Option 1: Using Node.js (Built-in Server)
 ```bash
@@ -34,13 +59,15 @@ Then open your browser at **`http://localhost:3000/`**.
 | **W, A, S, D** | Move Forward / Left / Backward / Right |
 | **Mouse** | Aim / Look (Pointer Lock) |
 | **Left Mouse Button (LMB)** | Fire Active Weapon |
-| **Right Mouse Button (RMB)** | Aim Down Sights (ADS / Zoom) |
+| **Right Mouse Button (RMB)** | Aim Down Sights (ADS / Precision Zoom) |
 | **Shift** | Tactical Sprint |
 | **Space** | Jump |
 | **Ctrl / C** | Crouch |
-| **R** | Reload Weapon |
-| **1 - 4** | Select Weapon (Pistol, AR, Shotgun, Plasma Rifle) |
-| **E** | Interact (Hack Security Terminal) |
+| **R** | Reload Active Weapon |
+| **F** | Toggle Tactical Flashlight (On / Off) |
+| **1 - 5** | Select Weapon (Pistol, AR, Shotgun, Plasma, Viper) |
+| **Mouse Wheel** | Cycle Equipped Weapons |
+| **E** | Interact (Hack Terminals, Activate Relays) |
 | **ESC** | Pause Menu / Resume |
 
 ---
@@ -48,7 +75,7 @@ Then open your browser at **`http://localhost:3000/`**.
 ## 🔫 Weapon Arsenal
 
 1. **P19 Tactical Pistol** (Slot 1)
-   - Semi-automatic sidearm with high precision, fast reload, and crisp sound profile.
+   - Semi-automatic sidearm with high precision, fast reload, and crisp acoustic profile.
    - Mag size: 12 | Reserve: 48 | Headshot multiplier: 2.5x
 2. **AR-44 'Vector' Assault Rifle** (Slot 2)
    - Full-automatic standard issue rifle with 600 RPM fire rate and holographic reticle.
@@ -59,35 +86,29 @@ Then open your browser at **`http://localhost:3000/`**.
 4. **PR-9 Plasma Rifle** (Slot 4)
    - Heavy rapid-fire energy weapon firing high-damage plasma bolts with zero drop.
    - Mag size: 20 | Reserve: 60 | High damage per shot
+5. **VX-9 'Viper' SMG** (Slot 5)
+   - Compact high-RPM suppressed submachine gun engineered for close-quarters room clearing in low-visibility environments.
+   - Mag size: 40 | Reserve: 160 | 850 RPM | Fast 1.35s reload
 
 ---
 
-## 🤖 Enemy Types & AI
+## 🤖 Hostile AI Threats
 
-- **Android Enforcer**: Standard assault combatant with burst rifle fire and cover maneuvers.
-- **Heavy Juggernaut**: High armor defense unit with twin heavy plasma cannons and steady advance.
+- **Android Enforcer**: Standard assault combatant with burst rifle fire and tactical cover maneuvers.
+- **Heavy Juggernaut**: High armor defense unit armed with twin heavy plasma cannons.
 - **Cyber Spectre**: Agile melee rusher that sprints and lunges with high-speed evasive pathfinding.
-
-Enemies utilize a finite state machine:
-`PATROL` ➔ `DETECT` ➔ `CHASE` ➔ `ATTACK` ➔ `SEARCH` ➔ `DEAD`
-
----
-
-## 🎯 Mission: Operation: Blacksite
-
-1. **Breach Facility Airlock**: Breach the surface airlock and secure the checkpoint.
-2. **Clear Cargo Bay Patrols**: Eliminate patrol units guarding the main warehouse.
-3. **Locate & Hack Security Core Terminal**: Locate the server hub console and press **[E]** to override security.
-4. **Survive Facility Lockdown**: Defend against alarm-triggered reinforcements for 30 seconds.
-5. **Reach Extraction Landing Zone**: Advance through the reactor chamber to the evacuation landing pad.
-6. **Mission Complete**: View detailed performance stats (Accuracy, Headshots, Score, and Rank).
+- **Security Drone**: Airborne tilt-rotor drone with searchlight detection cone, plasma burst attack, alert chime broadcasting, and crash explosion physics.
+- **Phantom**: Cybernetic stalker utilizing refractive translucent cloaking, close-range de-cloaking (<4.5m), glowing red visor, 28-dmg melee ambush lunge, and smoke retreat.
 
 ---
 
-## 🛠️ Architecture & Technologies
+## ⚡ Dynamic Systems & Features
 
-- **Graphics**: Three.js WebGL2 renderer with soft shadows, ACES filmic tone mapping, distance fog, and procedural lighting.
-- **Physics & Collision**: First-person kinematic character controller with swept AABB obstacle collision, variable height crouching, inertia, air control, and landing dips.
-- **Audio Engine**: 100% procedural real-time Web Audio API synthesizer (gunfire, reloads, impacts, footsteps, klaxons, and ambience).
-- **Navigation**: Multi-room waypoint graph with A* pathfinding and line-of-sight raycasting.
-- **Storage**: `localStorage` persistence for user preferences (FOV, sensitivity, volumes) and high scores.
+- **Dynamic Power Grid (6 States)**: `OFF`, `AUXILIARY`, `PARTIAL`, `FULL`, `LOCKDOWN`, and `CRITICAL`. Powers facility lighting, strobes, and blast doors.
+- **Tactical Flashlight**: Dual spotlight and local fill light with unlimited power and mechanical audio.
+- **First-Person Viewmodels**: Procedural 3D weapons with dual cybernetic tactical arms, hands, weapon bob, sprint tuck, ADS sight alignment, and muzzle flashes.
+- **Procedural Web Audio API Engine**: 100% synthesized sound effects (gunfire, reloads, impacts, drone hums, cloaking effects, alarm klaxons, and footsteps) with zero external audio assets.
+- **Automated QA & Regression Testing**:
+  - `node test_mission_02.js` — Comprehensive end-to-end Mission 02 and Mission 01 regression suite.
+  - `node test_full_game.js` — Mission 01 end-to-end playthrough audit.
+  - `node test_performance_audit.js` — 60 FPS performance, draw calls, and physics audit.
