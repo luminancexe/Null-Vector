@@ -2,6 +2,8 @@
 
 **Null Vector** is a complete, polished, browser-based first-person shooter (FPS) developed using HTML5, CSS3, JavaScript (ES6 modules), Three.js (WebGL), Pointer Lock API, and procedural Web Audio API.
 
+**Current Mission: Operation: Blacksite**
+
 The game is 100% self-contained with no external server or backend dependencies, using procedurally synthesized audio and procedural high-definition textures.
 
 ---
@@ -71,13 +73,13 @@ Enemies utilize a finite state machine:
 
 ---
 
-## 🎯 Mission: Operation Null Vector
+## 🎯 Mission: Operation: Blacksite
 
-1. **Infiltrate Facility Checkpoint**: Breach the surface airlock and secure the checkpoint.
-2. **Clear Cargo Bay Hostiles**: Eliminate patrol units guarding the main warehouse.
-3. **Hack Security Core Terminal**: Locate the server hub console and press **[E]** to override security.
+1. **Breach Facility Airlock**: Breach the surface airlock and secure the checkpoint.
+2. **Clear Cargo Bay Patrols**: Eliminate patrol units guarding the main warehouse.
+3. **Locate & Hack Security Core Terminal**: Locate the server hub console and press **[E]** to override security.
 4. **Survive Facility Lockdown**: Defend against alarm-triggered reinforcements for 30 seconds.
-5. **Reach Extraction Zone**: Advance through the reactor chamber to the evacuation landing pad.
+5. **Reach Extraction Landing Zone**: Advance through the reactor chamber to the evacuation landing pad.
 6. **Mission Complete**: View detailed performance stats (Accuracy, Headshots, Score, and Rank).
 
 ---

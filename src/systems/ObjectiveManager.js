@@ -33,7 +33,7 @@ export class ObjectiveManager {
     let text = '';
     switch (this.currentStep) {
       case OBJECTIVE_STEPS.BREACH_AIRLOCK:
-        text = '1. Infiltrate Facility Checkpoint';
+        text = '1. Breach Facility Airlock';
         break;
       case OBJECTIVE_STEPS.CLEAR_CARGO_BAY:
         text = `2. Clear Cargo Bay Patrols (${this.cargoKills}/${this.requiredCargoKills})`;
@@ -45,7 +45,7 @@ export class ObjectiveManager {
         text = `4. SURVIVE FACILITY LOCKDOWN (${Math.ceil(this.lockdownTimer)}s)`;
         break;
       case OBJECTIVE_STEPS.REACH_EXTRACTION:
-        text = '5. Proceed to Extraction Evacuation Zone';
+        text = '5. Reach Extraction Landing Zone';
         break;
       case OBJECTIVE_STEPS.COMPLETE:
         text = 'MISSION ACCOMPLISHED';
