@@ -130,14 +130,14 @@ export class ShootingSystem {
     let isKill = false;
 
     // Find parent enemy or dummy data
-    let target = obj.userData?.target || obj.parent?.userData?.target;
+    let target = obj.userData?.enemy || obj.userData?.target || obj.parent?.userData?.enemy || obj.parent?.userData?.target;
 
     if (target && typeof target.takeDamage === 'function') {
       isEnemy = true;
       this.game.stats.shotsHit++;
 
       // Check hit zone (Headshot detection)
-      if (obj.userData?.hitZone === 'head' || hit.point.y - (target.position?.y || 0) > 1.4) {
+      if (obj.userData?.isHeadshot || obj.userData?.hitZone === 'head' || hit.point.y - (target.position?.y || 0) > 1.4) {
         isHeadshot = true;
       }
 

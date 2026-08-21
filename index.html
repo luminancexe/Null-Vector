@@ -44,10 +44,17 @@
         <div class="hud-top">
           <div class="objective-box">
             <div>
-              <div class="objective-title">OPERATION: BLACKSITE</div>
+              <div id="hud-objective-title" class="objective-title">OPERATION: BLACKSITE</div>
               <div id="hud-objective-text" class="objective-text">1. Breach Facility Airlock</div>
             </div>
             <div id="hud-mission-timer" class="mission-timer">00:00</div>
+          </div>
+          <div class="hud-status-bar">
+            <div id="hud-power-indicator" class="hud-badge">POWER: OFF</div>
+            <div id="hud-flashlight-indicator" class="hud-badge">[F] LIGHT: OFF</div>
+          </div>
+          <div id="hud-extraction-timer" class="hud-extraction-timer" style="display: none;">
+            EVACUATION <span id="hud-evac-time">03:00</span>
           </div>
         </div>
 
@@ -92,6 +99,7 @@
             <div id="slot-2" class="weapon-slot">2</div>
             <div id="slot-3" class="weapon-slot">3</div>
             <div id="slot-4" class="weapon-slot">4</div>
+            <div id="slot-5" class="weapon-slot">5</div>
           </div>
         </div>
       </div>
@@ -115,12 +123,88 @@
       <div id="main-menu" class="menu-overlay">
         <div class="menu-card interactive">
           <div class="menu-title">NULL VECTOR</div>
-          <div class="menu-subtitle">OPERATION: BLACKSITE</div>
+          <div id="main-menu-subtitle" class="menu-subtitle">OPERATION: BLACKSITE</div>
           <div class="menu-buttons">
             <button id="btn-play" class="btn-primary">START MISSION</button>
+            <button id="btn-mission-select" class="btn-secondary">MISSION SELECT</button>
             <button id="btn-controls" class="btn-secondary">CONTROLS</button>
             <button id="btn-settings" class="btn-secondary">SETTINGS</button>
             <button id="btn-credits" class="btn-secondary">INTEL / CREDITS</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission Selection Menu -->
+      <div id="mission-select-menu" class="menu-overlay">
+        <div class="menu-card interactive" style="max-width: 650px;">
+          <div class="menu-title">MISSION SELECT</div>
+          <div class="menu-subtitle">CAMPAIGN OPERATIONS</div>
+          <div class="mission-list" style="display: flex; flex-direction: column; gap: 14px; margin: 20px 0;">
+            <div id="card-mission-01" class="mission-card selected" style="padding: 16px; background: rgba(0, 240, 255, 0.08); border: 1px solid var(--accent-cyan); border-radius: 4px; cursor: pointer; text-align: left;">
+              <div style="font-weight: 700; color: var(--accent-cyan); font-size: 1.1rem;">MISSION 01 — OPERATION: BLACKSITE</div>
+              <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">LOCATION: SUBTERRANEAN RESEARCH COMPLEX THETA-9</div>
+              <div style="font-size: 0.9rem; color: var(--text-main); margin-top: 6px;">Infiltrate facility checkpoint, neutralize cargo bay hostiles, hack security core terminal, and extract.</div>
+            </div>
+            <div id="card-mission-02" class="mission-card" style="padding: 16px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; cursor: pointer; text-align: left;">
+              <div style="font-weight: 700; color: var(--accent-cyan); font-size: 1.1rem;">MISSION 02 — BLACKOUT</div>
+              <div style="font-size: 0.85rem; color: var(--text-dim); margin-top: 4px;">LOCATION: RESEARCH FACILITY 07 // PRIMARY POWER OFFLINE</div>
+              <div style="font-size: 0.9rem; color: var(--text-main); margin-top: 6px;">Investigate dark facility, restore auxiliary power relays, recover incident logs, survive lockdown, and uncover Project Singularity.</div>
+            </div>
+          </div>
+          <div class="menu-buttons">
+            <button id="btn-mission-select-deploy" class="btn-primary">VIEW BRIEFING</button>
+            <button id="btn-mission-select-back" class="btn-secondary">BACK</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mission Briefing Modal -->
+      <div id="briefing-menu" class="menu-overlay">
+        <div class="menu-card interactive" style="max-width: 600px; text-align: left;">
+          <div class="menu-title" style="text-align: center;">NULL VECTOR</div>
+          <div id="briefing-mission-title" class="menu-subtitle" style="text-align: center; color: var(--accent-cyan);">MISSION 02 — BLACKOUT</div>
+          <div class="briefing-body" style="font-family: monospace; font-size: 0.92rem; line-height: 1.7; background: rgba(0,0,0,0.5); padding: 18px; border: 1px solid rgba(0,240,255,0.3); border-radius: 4px; margin: 18px 0; color: var(--text-main);">
+            <div>LOCATION: <span id="briefing-loc" style="color: #fff;">RESEARCH FACILITY 07</span></div>
+            <div>STATUS: <span id="briefing-status" style="color: var(--accent-amber);">OFFLINE</span></div>
+            <div>PRIMARY POWER: <span id="briefing-power" style="color: #ff4466;">DISABLED</span></div>
+            <div>LAST TRANSMISSION: <span id="briefing-trans" style="color: var(--text-dim);">UNKNOWN</span></div>
+            <div style="margin-top: 12px; border-top: 1px dashed rgba(255,255,255,0.2); padding-top: 10px;">
+              <strong style="color: var(--accent-cyan);">MISSION OBJECTIVES:</strong>
+              <div id="briefing-objectives" style="white-space: pre-line; color: #fff; margin-top: 6px;">
+                INVESTIGATE THE FACILITY.
+                RESTORE POWER.
+                RECOVER THE INCIDENT LOGS.
+                IDENTIFY THE SOURCE OF THE BLACKOUT.
+                EXTRACT.
+              </div>
+            </div>
+          </div>
+          <div class="menu-buttons" style="justify-content: center;">
+            <button id="btn-briefing-launch" class="btn-primary">DEPLOY OPERATIVE</button>
+            <button id="btn-briefing-back" class="btn-secondary">BACK</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Incident Log Terminal Modal -->
+      <div id="terminal-log-modal" class="menu-overlay">
+        <div class="menu-card interactive" style="max-width: 600px; text-align: left; border: 1px solid #ff0044; box-shadow: 0 0 30px rgba(255,0,68,0.3);">
+          <div class="menu-title" style="color: #ff0044; font-size: 1.5rem;">SECURITY ARCHIVE</div>
+          <div class="menu-subtitle" style="color: #ff8899;">FACILITY INCIDENT LOG // RECORD 77-B</div>
+          <div style="font-family: monospace; font-size: 0.95rem; line-height: 1.8; background: rgba(20,0,5,0.8); padding: 18px; border: 1px solid rgba(255,0,68,0.4); border-radius: 4px; margin: 18px 0; color: #ffcccc;">
+            <div>DATE: [CLASSIFIED]</div>
+            <div>INCIDENT: POWER GRID FAILURE</div>
+            <div>CAUSE: MANUAL SYSTEM OVERRIDE</div>
+            <div>AUTHORIZATION: UNKNOWN</div>
+            <div>SECURITY STATUS: <span style="color: #ff0044; font-weight: 700;">COMPROMISED</span></div>
+            <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(255,0,68,0.5);">
+              PROJECT DESIGNATION: <span style="color: #00f0ff; font-weight: 700;">SINGULARITY</span><br>
+              CONTAINMENT STATUS: <span style="color: #ff0044; font-weight: 700;">CRITICAL FAILURE</span><br>
+              DATA CLASSIFICATION: <span style="color: #ffaa00; font-weight: 700;">OMEGA</span>
+            </div>
+          </div>
+          <div class="menu-buttons" style="justify-content: center;">
+            <button id="btn-terminal-close" class="btn-primary" style="background: #ff0044; border-color: #ff4466;">CLOSE TERMINAL</button>
           </div>
         </div>
       </div>
@@ -129,7 +213,7 @@
       <div id="pause-menu" class="menu-overlay">
         <div class="menu-card interactive">
           <div class="menu-title">SYSTEM PAUSED</div>
-          <div class="menu-subtitle">OPERATION: BLACKSITE — SUSPENDED</div>
+          <div id="pause-menu-subtitle" class="menu-subtitle">OPERATION: BLACKSITE — SUSPENDED</div>
           <div class="menu-buttons">
             <button id="btn-resume" class="btn-primary">RESUME</button>
             <button id="btn-pause-settings" class="btn-secondary">SETTINGS</button>
@@ -205,7 +289,8 @@
             <div class="control-row"><span class="control-key">SPACE</span><span class="control-desc">Jump</span></div>
             <div class="control-row"><span class="control-key">CTRL / C</span><span class="control-desc">Crouch</span></div>
             <div class="control-row"><span class="control-key">R</span><span class="control-desc">Reload</span></div>
-            <div class="control-row"><span class="control-key">1 - 4</span><span class="control-desc">Select Weapon</span></div>
+            <div class="control-row"><span class="control-key">F</span><span class="control-desc">Toggle Flashlight</span></div>
+            <div class="control-row"><span class="control-key">1 - 5</span><span class="control-desc">Select Weapon (1-4 / 5 Viper)</span></div>
             <div class="control-row"><span class="control-key">E</span><span class="control-desc">Interact / Hack</span></div>
             <div class="control-row"><span class="control-key">ESC</span><span class="control-desc">Pause Menu</span></div>
           </div>
@@ -219,11 +304,10 @@
       <div id="credits-menu" class="menu-overlay">
         <div class="menu-card interactive">
           <div class="menu-title">SECTOR INTEL</div>
-          <div class="menu-subtitle">OPERATION: BLACKSITE</div>
+          <div id="credits-subtitle" class="menu-subtitle">OPERATION: BLACKSITE</div>
           <p style="color: var(--text-main); font-size: 0.95rem; line-height: 1.6; text-align: left;">
-            Operation: Blacksite<br>
-            Location: Subterranean Research Complex Theta-9.<br>
-            Objective: Secure data cores and neutralize automated defense androids.<br>
+            Campaign: NULL VECTOR<br>
+            Missions: 01 Operation: Blacksite // 02 Blackout<br>
             Engine: Custom WebGL & Three.js 3D Engine.<br>
             Audio: Real-time Synthesized Web Audio API.
           </p>
@@ -252,9 +336,9 @@
 
       <!-- Victory Screen -->
       <div id="victory-menu" class="menu-overlay">
-        <div class="menu-card interactive">
+        <div class="menu-card interactive" style="max-width: 600px;">
           <div class="menu-title" style="color: var(--accent-green);">MISSION ACCOMPLISHED</div>
-          <div class="menu-subtitle">OPERATION: BLACKSITE — DATA SECURED</div>
+          <div id="victory-subtitle" class="menu-subtitle">OPERATION: BLACKSITE — DATA SECURED</div>
           <table class="stats-table">
             <tr><td>Mission Time:</td><td id="vic-stat-time">00:00</td></tr>
             <tr><td>Hostiles Neutralized:</td><td id="vic-stat-kills">0</td></tr>
@@ -263,6 +347,14 @@
             <tr><td>Final Score:</td><td id="vic-stat-score">0</td></tr>
             <tr><td>Performance Rank:</td><td id="vic-stat-rank" style="color: var(--accent-amber); font-size: 1.3rem;">S</td></tr>
           </table>
+
+          <div id="vic-singularity-card" style="display: none; margin: 16px 0; padding: 14px; background: rgba(255,0,68,0.12); border: 1px solid #ff0044; color: #ffcccc; text-align: left; font-size: 0.88rem; font-family: monospace;">
+            <div style="color: #00f0ff; font-weight: 700; margin-bottom: 4px;">PROJECT DESIGNATION: SINGULARITY</div>
+            <div>STATUS: <span style="color: #ff0044; font-weight: 700;">CONTAINMENT FAILURE</span></div>
+            <div>DATA CLASSIFICATION: <span style="color: #ffaa00; font-weight: 700;">OMEGA</span></div>
+            <div style="margin-top: 14px; font-size: 1.3rem; font-weight: 900; color: #00f0ff; text-align: center; letter-spacing: 3px;">TO BE CONTINUED</div>
+          </div>
+
           <div class="menu-buttons">
             <button id="btn-vic-restart" class="btn-primary">PLAY AGAIN</button>
             <button id="btn-vic-menu" class="btn-secondary">MAIN MENU</button>

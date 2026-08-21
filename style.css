@@ -745,3 +745,57 @@ html, body {
   color: var(--accent-red) !important;
   text-shadow: 0 0 25px var(--accent-red-glow) !important;
 }
+
+/* ==========================================================================
+   MISSION 02 HUD BADGES & MISSION CARDS
+   ========================================================================== */
+
+.hud-status-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.hud-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: var(--primary-cyan);
+  border-radius: 2px;
+  letter-spacing: 1px;
+}
+
+.hud-extraction-timer {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ff0044;
+  background: rgba(255, 0, 68, 0.15);
+  border: 1px solid #ff0044;
+  padding: 4px 14px;
+  border-radius: 3px;
+  margin-top: 8px;
+  animation: pulseEvac 1s infinite alternate;
+}
+
+@keyframes pulseEvac {
+  from { opacity: 0.7; box-shadow: 0 0 5px rgba(255, 0, 68, 0.3); }
+  to { opacity: 1.0; box-shadow: 0 0 18px rgba(255, 0, 68, 0.8); }
+}
+
+.mission-card {
+  transition: all 0.2s ease;
+}
+
+.mission-card:hover {
+  border-color: var(--primary-cyan) !important;
+  background: rgba(0, 240, 255, 0.05) !important;
+}
+
+.mission-card.selected {
+  border-color: var(--primary-cyan) !important;
+  background: rgba(0, 240, 255, 0.12) !important;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+}

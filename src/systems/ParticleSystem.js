@@ -107,6 +107,10 @@ export class ParticleSystem {
     }
   }
 
+  spawnSparks(pos, count = 8) {
+    this.spawnEnemyHitEffect(pos);
+  }
+
   spawnExplosion(pos, scale = 1.0) {
     // 1. Flash
     const flash = new THREE.Mesh(this.flashGeo, this.flashMat.clone());

@@ -105,6 +105,7 @@ export class WeaponManager {
     this.weapons[2] = new Weapon(WEAPON_PRESETS.rifle);
     this.weapons[3] = new Weapon(WEAPON_PRESETS.shotgun);
     this.weapons[4] = new Weapon(WEAPON_PRESETS.plasma);
+    this.weapons[5] = new Weapon(WEAPON_PRESETS.viper);
 
     const mats = this._createSharedMaterials();
 
@@ -119,6 +120,9 @@ export class WeaponManager {
 
     // 4. Plasma Rifle (PR-9) + Hands
     this._buildPlasma(mats);
+
+    // 5. VX-9 Viper SMG + Hands
+    this._buildViper(mats);
 
     // Hook reload callbacks
     Object.values(this.weapons).forEach(w => {
@@ -418,6 +422,80 @@ export class WeaponManager {
     this.muzzlePositions['plasma'] = new THREE.Vector3(0, 0.02, -0.46);
   }
 
+  _buildViper(mats) {
+    const root = new THREE.Group();
+
+    // --- Weapon ---
+    const gun = new THREE.Group();
+    // Compact Main Receiver
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.048, 0.075, 0.30), mats.darkMetal);
+    gun.add(body);
+
+    // Barrel Shroud
+    const barrel = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.22, 10), mats.gunMetal);
+    barrel.rotation.x = Math.PI / 2;
+    barrel.position.set(0, 0.015, -0.22);
+    gun.add(barrel);
+
+    // Muzzle Compensator
+    const brake = new THREE.Mesh(new THREE.BoxGeometry(0.028, 0.028, 0.04), mats.darkMetal);
+    brake.position.set(0, 0.015, -0.34);
+    gun.add(brake);
+
+    // Curved 40-round Magazine
+    const mag = new THREE.Mesh(new THREE.BoxGeometry(0.032, 0.15, 0.055), mats.darkMetal);
+    mag.position.set(0, -0.09, 0.02);
+    mag.rotation.x = 0.2;
+    gun.add(mag);
+
+    // Pistol Grip
+    const grip = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.11, 0.048), mats.gripMat);
+    grip.position.set(0, -0.045, 0.08);
+    grip.rotation.x = -0.25;
+    gun.add(grip);
+
+    // Forward Angled Grip
+    const fGrip = new THREE.Mesh(new THREE.BoxGeometry(0.034, 0.075, 0.042), mats.gripMat);
+    fGrip.position.set(0, -0.038, -0.14);
+    fGrip.rotation.x = 0.3;
+    gun.add(fGrip);
+
+    // Top Picatinny Rail & Holo Sight Frame
+    const sight = new THREE.Mesh(new THREE.BoxGeometry(0.036, 0.035, 0.06), mats.gunMetal);
+    sight.position.set(0, 0.058, -0.04);
+    gun.add(sight);
+
+    // Glowing Reticle Dot
+    const reticle = new THREE.Mesh(new THREE.BoxGeometry(0.005, 0.005, 0.005), mats.cyanGlow);
+    reticle.position.set(0, 0.062, -0.04);
+    gun.add(reticle);
+
+    // Glowing Cyan Energy Ammo Status Conduit
+    const glow = new THREE.Mesh(new THREE.BoxGeometry(0.049, 0.008, 0.12), mats.cyanGlow);
+    glow.position.set(0, 0.025, -0.02);
+    gun.add(glow);
+
+    root.add(gun);
+
+    // --- Hands ---
+    // Right Hand (Pistol Grip & Trigger)
+    const rightArm = this._createArm(mats, false);
+    rightArm.position.set(0.01, -0.05, 0.08);
+    rightArm.rotation.set(-0.25, 0.05, 0);
+    root.add(rightArm);
+
+    // Left Hand (Forward Angled Grip)
+    const leftArm = this._createArm(mats, true);
+    leftArm.position.set(0.01, -0.03, -0.14);
+    leftArm.rotation.set(0.25, 0.2, -0.25);
+    root.add(leftArm);
+
+    root.visible = false;
+    this.weaponGroup.add(root);
+    this.weaponMeshes['viper'] = root;
+    this.muzzlePositions['viper'] = new THREE.Vector3(0, 0.015, -0.36);
+  }
+
   /* ==========================================================================
      WEAPON CONTROLS & ANIMATIONS
      ========================================================================== */
@@ -515,17 +593,18 @@ export class WeaponManager {
   }
 
   _handleInput(delta) {
-    // 1. Weapon Switching (Keys 1-4 & Mouse Wheel)
+    // 1. Weapon Switching (Keys 1-5 & Mouse Wheel)
     if (this.input.wasKeyJustPressed('Digit1')) this.equipSlot(1);
     if (this.input.wasKeyJustPressed('Digit2')) this.equipSlot(2);
     if (this.input.wasKeyJustPressed('Digit3')) this.equipSlot(3);
     if (this.input.wasKeyJustPressed('Digit4')) this.equipSlot(4);
+    if (this.input.wasKeyJustPressed('Digit5')) this.equipSlot(5);
 
     const wheel = this.input.consumeWheelDelta();
     if (wheel !== 0) {
       let nextSlot = this.activeSlot + wheel;
-      if (nextSlot > 4) nextSlot = 1;
-      if (nextSlot < 1) nextSlot = 4;
+      if (nextSlot > 5) nextSlot = 1;
+      if (nextSlot < 1) nextSlot = 5;
       this.equipSlot(nextSlot);
     }
 

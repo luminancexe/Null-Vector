@@ -17,6 +17,8 @@ import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { DecalManager } from '../systems/DecalManager.js';
 import { ObjectiveManager } from '../systems/ObjectiveManager.js';
 import { UIManager } from '../ui/UIManager.js';
+import { MissionManager } from '../campaign/MissionManager.js';
+import { Flashlight } from '../entities/Flashlight.js';
 
 export const GameState = {
   LOADING: 'LOADING',
@@ -147,23 +149,24 @@ export class Game {
     this.player = new Player(this);
     this.player.baseFov = this.settings.fov || 75;
 
-    // 2. Weapons & Systems
+    // 2. Flashlight
+    this.flashlight = new Flashlight(this);
+
+    // 3. Weapons & Systems
     this.weaponManager = new WeaponManager(this);
     this.shootingSystem = new ShootingSystem(this);
     this.particleManager = new ParticleSystem(this);
     this.decalManager = new DecalManager(this);
 
-    // 3. Level Geometry & Facility
-    this.level = new Level(this);
-
     // 4. Enemy AI Manager
     this.enemyManager = new EnemyManager(this);
 
-    // 5. Objective System
-    this.objectiveManager = new ObjectiveManager(this);
-
-    // 6. UI Manager
+    // 5. UI Manager
     this.uiManager = new UIManager(this);
+
+    // 6. Mission Manager & Campaign Coordinator
+    this.missionManager = new MissionManager(this);
+    this.missionManager.loadActiveMission();
   }
 
   _bindEvents() {
@@ -214,62 +217,10 @@ export class Game {
   }
 
   restartMission() {
-    console.log('[Null Vector] Restarting mission...');
-    // Reset stats
-    this.stats = {
-      playTime: 0,
-      kills: 0,
-      headshots: 0,
-      shotsFired: 0,
-      shotsHit: 0
-    };
-
-    // Reset player
-    if (this.player) {
-      this.player.setSpawn(0, 0, 32, 0);
+    console.log('[Null Vector] Restarting active mission...');
+    if (this.missionManager) {
+      this.missionManager.restartActiveMission();
     }
-
-    // Reset weapons
-    if (this.weaponManager) {
-      Object.values(this.weaponManager.weapons).forEach(w => w.reset());
-      this.weaponManager.equipSlot(1);
-    }
-
-    // Reset enemies
-    if (this.enemyManager) {
-      this.enemyManager.reset();
-    }
-
-    // Reset level pickups & doors
-    if (this.level) {
-      this.level.pickupManager.reset();
-      this.level.doors.forEach(d => {
-        d.isOpen = false;
-        d.isLocked = true;
-        d.openProgress = 0;
-      });
-      if (this.level.securityTerminal) {
-        this.level.securityTerminal.isHacked = false;
-      }
-      this.level.isLockdown = false;
-      this.level.alarmLights.forEach(l => this.scene.remove(l));
-      this.level.alarmLights = [];
-    }
-
-    // Reset decals
-    if (this.decalManager) {
-      this.decalManager.reset();
-    }
-
-    // Reset objectives
-    if (this.objectiveManager) {
-      this.objectiveManager.reset();
-    }
-
-    if (this.uiManager) {
-      this.uiManager.updateHUD();
-    }
-
     this.setState(GameState.PLAYING);
   }
 
@@ -293,6 +244,7 @@ export class Game {
       this.stats.playTime += delta;
 
       if (this.player) this.player.update(delta);
+      if (this.flashlight) this.flashlight.update(delta);
       if (this.weaponManager) this.weaponManager.update(delta);
       if (this.enemyManager) this.enemyManager.update(delta);
       if (this.particleManager) this.particleManager.update(delta);

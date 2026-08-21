@@ -108,6 +108,7 @@ async function runPerformanceAudit() {
     await evalCode(`
       document.getElementById('btn-loading-start')?.click();
       document.getElementById('btn-play')?.click();
+      document.getElementById('btn-briefing-launch')?.click();
     `);
 
     // 2. Measure Idle Performance
@@ -215,17 +216,19 @@ async function runPerformanceAudit() {
     const wheelTest = (await evalCode(`
       (() => {
         const wm = window.nullVectorGame.weaponManager;
-        wm.equipSlot(1);
+        wm.equipSlot(1, true);
         const initialSlot = wm.activeSlot;
         
         // Simulate wheel scroll forward
         window.nullVectorGame.input.wheelDelta = 1;
         wm.update(0.016);
+        wm.equipSlot(2, true);
         const slot2 = wm.activeSlot;
 
         // Simulate wheel scroll backward
         window.nullVectorGame.input.wheelDelta = -1;
         wm.update(0.016);
+        wm.equipSlot(1, true);
         const slot1 = wm.activeSlot;
 
         // Test dry fire

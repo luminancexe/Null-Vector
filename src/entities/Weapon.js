@@ -196,5 +196,24 @@ export const WEAPON_PRESETS = {
     recoilKick: 0.06,
     recoilPitch: 0.028,
     recoilYaw: 0.01
+  },
+  viper: {
+    id: 'viper',
+    name: 'VX-9 VIPER',
+    slot: 5,
+    damage: 13,
+    headshotMultiplier: 2.0,
+    fireRate: 0.07, // ~850 RPM
+    isAutomatic: true,
+    pellets: 1,
+    spread: 0.022,
+    range: 50,
+    magSize: 40,
+    reserveAmmo: 160,
+    maxReserve: 320,
+    reloadTime: 1.35,
+    recoilKick: 0.028,
+    recoilPitch: 0.016,
+    recoilYaw: 0.01
   }
 };

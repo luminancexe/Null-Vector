@@ -635,4 +635,30 @@ export class Level {
   getRaycastMeshes() {
     return this.raycastMeshes;
   }
+
+  cleanup() {
+    this.doors.forEach(d => {
+      if (d.group) this.scene.remove(d.group);
+    });
+    this.alarmLights.forEach(l => this.scene.remove(l));
+    this.colliders = [];
+    this.raycastMeshes = [];
+    this.interactiveObjects = [];
+    this.doors = [];
+  }
+
+  reset() {
+    this.pickupManager.reset();
+    this.doors.forEach(d => {
+      d.isOpen = false;
+      d.isLocked = true;
+      d.openProgress = 0;
+    });
+    if (this.securityTerminal) {
+      this.securityTerminal.isHacked = false;
+    }
+    this.isLockdown = false;
+    this.alarmLights.forEach(l => this.scene.remove(l));
+    this.alarmLights = [];
+  }
 }

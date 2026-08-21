@@ -17,6 +17,9 @@ window.addEventListener('DOMContentLoaded', () => {
   // Menu Elements
   const loadingScreen = document.getElementById('loading-screen');
   const mainMenu = document.getElementById('main-menu');
+  const missionSelectMenu = document.getElementById('mission-select-menu');
+  const briefingMenu = document.getElementById('briefing-menu');
+  const terminalLogModal = document.getElementById('terminal-log-modal');
   const pauseMenu = document.getElementById('pause-menu');
   const settingsMenu = document.getElementById('settings-menu');
   const controlsMenu = document.getElementById('controls-menu');
@@ -28,6 +31,14 @@ window.addEventListener('DOMContentLoaded', () => {
   // Buttons
   const btnLoadingStart = document.getElementById('btn-loading-start');
   const btnPlay = document.getElementById('btn-play');
+  const btnMissionSelect = document.getElementById('btn-mission-select');
+  const btnMissionSelectBack = document.getElementById('btn-mission-select-back');
+  const btnMissionSelectDeploy = document.getElementById('btn-mission-select-deploy');
+  const cardMission01 = document.getElementById('card-mission-01');
+  const cardMission02 = document.getElementById('card-mission-02');
+  const btnBriefingLaunch = document.getElementById('btn-briefing-launch');
+  const btnBriefingBack = document.getElementById('btn-briefing-back');
+  const btnTerminalClose = document.getElementById('btn-terminal-close');
   const btnResume = document.getElementById('btn-resume');
   const btnSettings = document.getElementById('btn-settings');
   const btnPauseSettings = document.getElementById('btn-pause-settings');
@@ -158,10 +169,79 @@ window.addEventListener('DOMContentLoaded', () => {
     game.setState(GameState.MENU);
   });
 
+  let selectedMissionId = 'mission_01';
+
+  const updateBriefingView = (missionId) => {
+    const config = game.missionManager.missions[missionId];
+    if (!config) return;
+    const titleEl = document.getElementById('briefing-mission-title');
+    const locEl = document.getElementById('briefing-loc');
+    const statusEl = document.getElementById('briefing-status');
+    const powerEl = document.getElementById('briefing-power');
+    const transEl = document.getElementById('briefing-trans');
+    const objEl = document.getElementById('briefing-objectives');
+
+    if (titleEl) titleEl.textContent = `MISSION ${config.number} — ${config.title}`;
+    if (locEl) locEl.textContent = config.briefing.location;
+    if (statusEl) statusEl.textContent = config.status;
+    if (powerEl) powerEl.textContent = missionId === 'mission_02' ? 'DISABLED // GRID OFFLINE' : 'OPERATIONAL';
+    if (transEl) transEl.textContent = missionId === 'mission_02' ? 'INCOMPLETE // DISTRESS CORRUPTED' : 'STANDARD SECURE';
+    if (objEl) objEl.textContent = config.briefing.objective;
+  };
+
+  cardMission01?.addEventListener('click', () => {
+    selectedMissionId = 'mission_01';
+    cardMission01.classList.add('selected');
+    cardMission02?.classList.remove('selected');
+  });
+
+  cardMission02?.addEventListener('click', () => {
+    selectedMissionId = 'mission_02';
+    cardMission02.classList.add('selected');
+    cardMission01?.classList.remove('selected');
+  });
+
+  btnMissionSelect?.addEventListener('click', () => {
+    mainMenu?.classList.remove('active');
+    missionSelectMenu?.classList.add('active');
+  });
+
+  btnMissionSelectBack?.addEventListener('click', () => {
+    missionSelectMenu?.classList.remove('active');
+    mainMenu?.classList.add('active');
+  });
+
+  btnMissionSelectDeploy?.addEventListener('click', () => {
+    missionSelectMenu?.classList.remove('active');
+    updateBriefingView(selectedMissionId);
+    briefingMenu?.classList.add('active');
+  });
+
+  btnBriefingBack?.addEventListener('click', () => {
+    briefingMenu?.classList.remove('active');
+    missionSelectMenu?.classList.add('active');
+  });
+
+  btnBriefingLaunch?.addEventListener('click', () => {
+    initAudio();
+    briefingMenu?.classList.remove('active');
+    game.missionManager.selectMission(selectedMissionId);
+    game.missionManager.loadActiveMission();
+    game.restartMission();
+  });
+
+  btnTerminalClose?.addEventListener('click', () => {
+    terminalLogModal?.classList.remove('active');
+    if (game.state === GameState.PLAYING) {
+      game.input.requestPointerLock();
+    }
+  });
+
   btnPlay?.addEventListener('click', () => {
     initAudio();
     mainMenu?.classList.remove('active');
-    game.restartMission();
+    updateBriefingView(game.missionManager.activeMissionId);
+    briefingMenu?.classList.add('active');
   });
 
   btnResume?.addEventListener('click', () => {

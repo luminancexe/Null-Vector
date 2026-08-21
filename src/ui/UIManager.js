@@ -23,7 +23,8 @@ export class UIManager {
       document.getElementById('slot-1'),
       document.getElementById('slot-2'),
       document.getElementById('slot-3'),
-      document.getElementById('slot-4')
+      document.getElementById('slot-4'),
+      document.getElementById('slot-5')
     ];
 
     this.crosshair = document.getElementById('crosshair-container');
@@ -32,13 +33,21 @@ export class UIManager {
     this.interactionPrompt = document.getElementById('interaction-prompt');
     this.interactionText = document.getElementById('interaction-text');
 
+    this.objectiveTitle = document.getElementById('hud-objective-title');
     this.objectiveText = document.getElementById('hud-objective-text');
     this.missionTimer = document.getElementById('hud-mission-timer');
+    this.powerIndicator = document.getElementById('hud-power-indicator');
+    this.flashlightIndicator = document.getElementById('hud-flashlight-indicator');
+    this.extractionTimer = document.getElementById('hud-extraction-timer');
+    this.evacTime = document.getElementById('hud-evac-time');
 
     // Menu Overlays
     this.menus = {
       loading: document.getElementById('loading-screen'),
       main: document.getElementById('main-menu'),
+      missionSelect: document.getElementById('mission-select-menu'),
+      briefing: document.getElementById('briefing-menu'),
+      terminal: document.getElementById('terminal-log-modal'),
       pause: document.getElementById('pause-menu'),
       settings: document.getElementById('settings-menu'),
       controls: document.getElementById('controls-menu'),
@@ -135,9 +144,68 @@ export class UIManager {
     }
   }
 
+  showInteractionPrompt(text) {
+    if (this.interactionPrompt) {
+      if (this.interactionText) this.interactionText.textContent = text;
+      this.interactionPrompt.style.display = 'block';
+    }
+  }
+
   hideInteraction() {
     if (this.interactionPrompt) {
       this.interactionPrompt.style.display = 'none';
+    }
+  }
+
+  hideInteractionPrompt() {
+    if (this.interactionPrompt) {
+      this.interactionPrompt.style.display = 'none';
+    }
+  }
+
+  setMissionTitle(title) {
+    if (this.objectiveTitle) this.objectiveTitle.textContent = title;
+    const mainSub = document.getElementById('main-menu-subtitle');
+    if (mainSub) mainSub.textContent = title;
+    const pauseSub = document.getElementById('pause-menu-subtitle');
+    if (pauseSub) pauseSub.textContent = `${title} — SUSPENDED`;
+    const credSub = document.getElementById('credits-subtitle');
+    if (credSub) credSub.textContent = title;
+  }
+
+  setPowerStateText(state) {
+    if (this.powerIndicator) {
+      this.powerIndicator.textContent = `POWER: ${state}`;
+      if (state === 'OFF') {
+        this.powerIndicator.style.borderColor = '#555';
+        this.powerIndicator.style.color = '#888';
+      } else if (state === 'LOCKDOWN' || state === 'CRITICAL') {
+        this.powerIndicator.style.borderColor = '#ff0044';
+        this.powerIndicator.style.color = '#ff0044';
+      } else {
+        this.powerIndicator.style.borderColor = 'var(--primary-cyan)';
+        this.powerIndicator.style.color = 'var(--primary-cyan)';
+      }
+    }
+  }
+
+  setFlashlightState(isOn) {
+    if (this.flashlightIndicator) {
+      this.flashlightIndicator.textContent = `[F] LIGHT: ${isOn ? 'ON' : 'OFF'}`;
+      this.flashlightIndicator.style.color = isOn ? '#fff' : 'var(--text-muted)';
+      this.flashlightIndicator.style.borderColor = isOn ? '#fff' : 'rgba(255,255,255,0.2)';
+    }
+  }
+
+  showIncidentLogModal() {
+    if (this.menus.terminal) {
+      this.menus.terminal.classList.add('active');
+    }
+  }
+
+  hideIncidentLogModal() {
+    if (this.menus.terminal) {
+      this.menus.terminal.classList.remove('active');
     }
   }
 
@@ -196,6 +264,18 @@ export class UIManager {
     const accEl = document.getElementById('vic-stat-accuracy');
     const scoreEl = document.getElementById('vic-stat-score');
     const rankEl = document.getElementById('vic-stat-rank');
+    const vicSub = document.getElementById('victory-subtitle');
+    const singCard = document.getElementById('vic-singularity-card');
+
+    const isMission02 = this.game.missionManager?.activeMissionId === 'mission_02';
+
+    if (vicSub) {
+      vicSub.textContent = isMission02 ? 'MISSION 02: BLACKOUT — COMPLETED' : 'OPERATION: BLACKSITE — DATA SECURED';
+    }
+
+    if (singCard) {
+      singCard.style.display = isMission02 ? 'block' : 'none';
+    }
 
     const acc = s.shotsFired > 0 ? Math.round((s.shotsHit / s.shotsFired) * 100) : 0;
     const score = (s.kills * 500) + (s.headshots * 300) + Math.max(0, Math.round((300 - s.playTime) * 20));
@@ -241,6 +321,7 @@ export class UIManager {
           if (wm.activeWeapon.id === 'shotgun') baseSpread = 16;
           else if (wm.activeWeapon.id === 'rifle') baseSpread = 8;
           else if (wm.activeWeapon.id === 'plasma') baseSpread = 5;
+          else if (wm.activeWeapon.id === 'viper') baseSpread = 7;
           else baseSpread = 6;
         }
 

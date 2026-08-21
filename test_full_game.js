@@ -87,6 +87,7 @@ async function testFullGame() {
     await evalCode(`
       document.getElementById('btn-loading-start')?.click();
       document.getElementById('btn-play')?.click();
+      document.getElementById('btn-briefing-launch')?.click();
     `);
 
     // Verify Game State is PLAYING

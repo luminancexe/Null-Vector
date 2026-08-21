@@ -11,11 +11,18 @@ export class EnemyManager {
     this.game = game;
     this.enemies = [];
     this.spawnPoints = [];
-
-    this._setupInitialEncounters();
   }
 
-  _setupInitialEncounters() {
+  clearAll() {
+    this.enemies.forEach(e => {
+      if (e.group) this.game.scene.remove(e.group);
+      if (e.searchlightMesh) this.game.scene.remove(e.searchlightMesh);
+    });
+    this.enemies = [];
+  }
+
+  setupMission01Encounters() {
+    this.clearAll();
     // 1. Entrance / Checkpoint Patrol (Enforcer)
     const e1 = this.spawnEnemy('enforcer', 0, 0, 14);
     e1.setPatrolWaypoints([
@@ -116,11 +123,18 @@ export class EnemyManager {
   }
 
   reset() {
-    // Remove all old enemy groups from scene
-    this.enemies.forEach(e => {
-      if (e.group) this.game.scene.remove(e.group);
-    });
-    this.enemies = [];
-    this._setupInitialEncounters();
+    this.clearAll();
+    if (this.game.missionManager?.activeMissionId === 'mission_02') {
+      this.setupMission02Encounters();
+    } else {
+      this.setupMission01Encounters();
+    }
+  }
+
+  setupMission02Encounters() {
+    this.clearAll();
+    if (this.game.level && typeof this.game.level._setupEncounters === 'function') {
+      this.game.level._setupEncounters();
+    }
   }
 }
