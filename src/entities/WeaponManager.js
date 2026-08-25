@@ -66,16 +66,18 @@ export class WeaponManager {
   }
 
   _initMuzzleEffects() {
-    // Dynamic point light for muzzle flare
-    this.muzzleLight = new THREE.PointLight(0x00f0ff, 0, 10);
+    // Subtle dynamic point light for soft muzzle illumination without blinding the player
+    this.muzzleLight = new THREE.PointLight(0x00f0ff, 0, 3.5);
     this.viewModel.add(this.muzzleLight);
 
-    // Muzzle flash cross sprite
-    const flashGeo = new THREE.PlaneGeometry(0.22, 0.22);
+    // Compact, soft muzzle flash sprite with additive blending
+    const flashGeo = new THREE.PlaneGeometry(0.07, 0.07);
     const flashMat = new THREE.MeshBasicMaterial({
       color: 0x00f0ff,
       transparent: true,
       opacity: 0,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
       side: THREE.DoubleSide
     });
     this.muzzleFlashMesh = new THREE.Mesh(flashGeo, flashMat);
@@ -536,17 +538,19 @@ export class WeaponManager {
   }
 
   _triggerMuzzleFlash() {
-    this.muzzleFlashTimer = 0.04;
+    this.muzzleFlashTimer = 0.025;
     const muzzleLocal = this.muzzlePositions[this.activeWeapon.id] || new THREE.Vector3(0, 0, -0.3);
 
+    const flashColor = this.activeWeapon.id === 'plasma' ? 0x00ff88 : (this.activeWeapon.id === 'viper' ? 0x55ccff : 0x00f0ff);
+
     this.muzzleLight.position.copy(muzzleLocal);
-    this.muzzleLight.color.setHex(this.activeWeapon.id === 'plasma' ? 0x00ff88 : 0x00f0ff);
-    this.muzzleLight.intensity = 4.5;
+    this.muzzleLight.color.setHex(flashColor);
+    this.muzzleLight.intensity = this.isADS ? 0.2 : 0.55;
 
     this.muzzleFlashMesh.position.copy(muzzleLocal);
     this.muzzleFlashMesh.rotation.z = Math.random() * Math.PI;
-    this.muzzleFlashMesh.material.color.setHex(this.activeWeapon.id === 'plasma' ? 0x00ff88 : 0x00f0ff);
-    this.muzzleFlashMesh.material.opacity = 1.0;
+    this.muzzleFlashMesh.material.color.setHex(flashColor);
+    this.muzzleFlashMesh.material.opacity = this.isADS ? 0.15 : 0.35;
   }
 
   getMuzzleWorldPosition() {

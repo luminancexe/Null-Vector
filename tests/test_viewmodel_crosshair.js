@@ -113,6 +113,7 @@ async function runViewmodelAndCrosshairAudit() {
     await evalCode(`
       document.getElementById('btn-loading-start')?.click();
       document.getElementById('btn-play')?.click();
+      document.getElementById('btn-briefing-launch')?.click();
     `);
     await new Promise(r => setTimeout(r, 500));
 
@@ -153,12 +154,12 @@ async function runViewmodelAndCrosshairAudit() {
     if (!playingStateCheck.isViewModelInCamera) throw new Error('ViewModel is not attached to camera!');
     if (!playingStateCheck.viewmodelVisible) throw new Error('ViewModel is not visible in PLAYING state!');
 
-    // 4. Verify All 4 Weapons have Viewmodels & Hands
+    // 4. Verify All 5 Weapons have Viewmodels & Hands
     const allWeaponsCheck = (await evalCode(`
       (() => {
         const wm = window.nullVectorGame.weaponManager;
         const results = {};
-        for (let s = 1; s <= 4; s++) {
+        for (let s = 1; s <= 5; s++) {
           wm.equipSlot(s, true);
           const wId = wm.activeWeapon.id;
           const mesh = wm.weaponMeshes[wId];
@@ -173,7 +174,7 @@ async function runViewmodelAndCrosshairAudit() {
         return results;
       })()
     `)).result.value;
-    console.log('3. All 4 Weapon & Hands Assemblies:', allWeaponsCheck);
+    console.log('3. All 5 Weapon & Hands Assemblies:', allWeaponsCheck);
 
     // 5. Test Dynamic Crosshair Spread (Idle vs Move vs Sprint vs ADS vs Shotgun)
     const crosshairDynamics = (await evalCode(`
