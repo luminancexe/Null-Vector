@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PORT = 3000;
+const ROOT_DIR = path.resolve(__dirname, '..');
+
 const MIME_TYPES = {
   '.html': 'text/html',
   '.css': 'text/css',
@@ -15,7 +17,8 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url.split('?')[0]);
+  let relativePath = req.url === '/' ? 'index.html' : req.url.split('?')[0].replace(/^\//, '');
+  let filePath = path.join(ROOT_DIR, relativePath);
   const ext = path.extname(filePath).toLowerCase();
   const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 

@@ -40,7 +40,8 @@ You can launch the game using any local static server:
 
 #### Option 1: Using Node.js (Built-in Server)
 ```bash
-node server.js
+npm start
+# or: node scripts/dev-server.js
 ```
 Then open your browser at **`http://localhost:3000/`**.
 

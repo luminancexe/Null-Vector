@@ -1,0 +1,16 @@
+{
+  "name": "null-vector",
+  "version": "1.0.0",
+  "description": "Null Vector — Browser-Based Sci-Fi First-Person Shooter",
+  "scripts": {
+    "start": "node scripts/dev-server.js",
+    "dev": "node scripts/dev-server.js"
+  },
+  "keywords": [
+    "game",
+    "threejs",
+    "fps",
+    "webgl"
+  ],
+  "license": "MIT"
+}
