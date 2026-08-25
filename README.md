@@ -109,6 +109,7 @@ Then open your browser at **`http://localhost:3000/`**.
 - **First-Person Viewmodels**: Procedural 3D weapons with dual cybernetic tactical arms, hands, weapon bob, sprint tuck, ADS sight alignment, and muzzle flashes.
 - **Procedural Web Audio API Engine**: 100% synthesized sound effects (gunfire, reloads, impacts, drone hums, cloaking effects, alarm klaxons, and footsteps) with zero external audio assets.
 - **Automated QA & Regression Testing**:
-  - `node test_mission_02.js` — Comprehensive end-to-end Mission 02 and Mission 01 regression suite.
-  - `node test_full_game.js` — Mission 01 end-to-end playthrough audit.
-  - `node test_performance_audit.js` — 60 FPS performance, draw calls, and physics audit.
+  - `node tests/test_mission_02.js` — Comprehensive end-to-end Mission 02 and Mission 01 regression suite.
+  - `node tests/test_full_game.js` — Mission 01 end-to-end playthrough audit.
+  - `node tests/test_performance_audit.js` — 60 FPS performance, draw calls, and physics audit.
+  - `node tests/test_viewmodel_crosshair.js` — Crosshair centering, recoil bloom, and ADS sight alignment.
